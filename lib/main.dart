@@ -9,8 +9,8 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<Counter>(
-      create: (_) => Counter(),
+    return MultiProvider(
+      providers: [ChangeNotifierProvider.value(value: Counter())],
       child: MaterialApp(
         title: "Provider Example",
         home: Scaffold(
@@ -30,7 +30,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _myVar;
-  _incrementCounter() {
+  _incrementCounter(BuildContext context) {
     Provider.of<Counter>(context, listen: false).incrementCounter();
   }
 
@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Text("You have pushed the button this many times"),
           Text(_myVar.toString(), style: Theme.of(context).textTheme.headline4),
           FloatingActionButton(
-            onPressed: _incrementCounter,
+            onPressed: () => _incrementCounter(context),
             child: Icon(Icons.plus_one_rounded),
           )
         ],
