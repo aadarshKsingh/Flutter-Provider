@@ -40,12 +40,12 @@ _incrementCount(BuildContext context) {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _count;
+ 
 
   @override
   Widget build(BuildContext context) {
     print("<=====widget rebuilt=====>");
-    _count = Provider.of<Counter>(context, listen: false).getCounter;
+ 
     return Center(
         child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
