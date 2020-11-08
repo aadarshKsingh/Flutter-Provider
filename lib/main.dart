@@ -6,50 +6,60 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider.value(value: Counter())],
+      providers: [
+        ChangeNotifierProvider(create: (BuildContext context) => Counter())
+      ],
       child: MaterialApp(
-        title: "Provider Example",
         home: Scaffold(
-            appBar: AppBar(
-              title: Text("Provider Example"),
-            ),
-            body: MyHomePage()),
+          appBar: AppBar(
+            title: Text("Provider Example"),
+          ),
+          body: HomePage(),
+        ),
       ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _myVar;
-  _incrementCounter(BuildContext context) {
-    Provider.of<Counter>(context, listen: false).incrementCounter();
-  }
+_incrementCount(BuildContext context) {
+  Provider.of<Counter>(context, listen: false).incrementCounter();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _count;
 
   @override
   Widget build(BuildContext context) {
-    _myVar = Provider.of<Counter>(context).getCounter;
+    print("<=====widget rebuilt=====>");
+    _count = Provider.of<Counter>(context, listen: false).getCounter;
     return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("You have pushed the button this many times"),
-          Text(_myVar.toString(), style: Theme.of(context).textTheme.headline4),
-          FloatingActionButton(
-            onPressed: () => _incrementCounter(context),
-            child: Icon(Icons.plus_one_rounded),
-          )
-        ],
-      ),
-    );
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text("You have pressed FAB this many times"),
+        Consumer<Counter>(
+          builder: (context, data, widget) => Text('${data.getCounter}'),
+        ),
+        FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () => {_incrementCount(context)},
+        ),
+      ],
+    ));
   }
 }
